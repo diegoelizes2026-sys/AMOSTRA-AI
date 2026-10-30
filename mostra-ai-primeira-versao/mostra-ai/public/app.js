@@ -46,6 +46,7 @@ async function loadProducts(){
  body.innerHTML=rows.map(p=>{const price=(p.price_cents/100).toLocaleString('pt-BR',{minimumFractionDigits:2});const low=p.stock_quantity<=p.minimum_stock;const label=!p.is_active?'Inativo':p.stock_quantity===0?'Em falta':low?'Estoque baixo':'Disponível';const cls=!p.is_active||p.stock_quantity===0?'status-out':low?'status-pending':'status-done';return '<tr><td><b>'+escapeHtml(p.name)+'</b></td><td>'+escapeHtml(p.category||'Sem categoria')+'</td><td>R$ '+price+'</td><td>'+p.stock_quantity+' un.</td><td><span class="status '+cls+'">'+label+'</span></td><td></td></tr>'}).join('')||'<tr><td colspan="6">Você ainda não cadastrou produtos.</td></tr>';
  if($('#product-foot'))$('#product-foot').textContent=rows.length+' produto(s) da sua empresa.';
 }
+$('#product-form').addEventListener('submit',saveProduct);
 async function saveProduct(e){
  e.preventDefault();if(!currentCompany){toast('Entre na sua conta primeiro.');return}
  const f=new FormData(e.currentTarget),price=Number(f.get('price')),stock=Number(f.get('stock'));
